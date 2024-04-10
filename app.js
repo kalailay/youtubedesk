@@ -17,6 +17,29 @@ const youtube = google.youtube({
     auth: process.env.YOUTUBE_API_KEY
 });
 
+function getCpuUsage(){
+    const cpus = os.cpus();
+    let idleTime = 0;
+    let totalTime = 0;
+
+    cpus.forEach(cpu => {
+        for (let type in cpu.times) {
+            totalTime += cpu.times[type];
+            if(type == 'idle') {
+                idleTime +=cpu.times[type];
+            }
+        }
+    });
+
+    //Calculate CPU usage precentage
+    const idlePrecentage = idleTime / cpus.length;
+    const totalPrecentage = totalTime / cpus.length;
+    const usagePrecentage = 100 - (100 * idlePrecentage / totalPrecentage);
+
+    return usagePrecentage.toFixed(2);
+
+}
+
 function convertDuration(duration) {
     let match = duration.match(/PT(\d+H)?(\d+M)?(\d+S)?/);
     let hours = (parseInt(match[1]) || 0);
@@ -69,7 +92,15 @@ app.get('/youtube', async (req, res) => {
     }
 });
 
-
+// Health check route
+app.get('/health', (req, res) => {
+    res.json({
+        os: os.type(),
+        languageVersion: process.version,
+        memoryUsage: `${(process.memoryUsage().rss / 1024 / 1024 / 1024 * 100).toFixed(2)}%`,
+        cpuUsage: `${getCpuUsage()}%`
+    });
+});
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
