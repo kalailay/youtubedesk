@@ -5,6 +5,7 @@ const express = require('express');
 const { google } = require('googleapis');
 const os = require('os');
 const config = require('./config');
+const {searchTypes,  videoAttributes} = require('./enums');
 
 // Initalizing an express app
 const app = express();
@@ -56,17 +57,17 @@ app.get('/youtube', async (req, res) => {
     console.log('Accessed /youtube endpoint');
     try {
         const searchResponse = await youtube.search.list({
-            part: 'snippet',
+            part: videoAttributes.snippet,
             q: config.searchSettings.textToSearch,
             maxResults: config.searchSettings.maxResults,
-            type: 'video'
+            type: searchTypes.video
         });
         
         // Ensure videoIds is defined in this scope and collect IDs
         const videoIds = searchResponse.data.items.map(item => item.id.videoId).join(',');
 
         const videosResponse = await youtube.videos.list({
-            part: 'snippet,contentDetails,statistics',
+            part: `${videoAttributes.snippet},${videoAttributes.contentDetails},${videoAttributes.statistics}`,
             id: videoIds
         });
         const videosInfo = videosResponse.data.items.map(video => {
