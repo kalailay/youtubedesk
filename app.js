@@ -1,14 +1,10 @@
-// express for creating a server
-// googleapis for interacting with Youtube API
-
 const express = require('express');
 const os = require('os');
 const config = require('./config');
 const { youtubeRouter } = require('./routers');
 
-// Initalizing an express app
 const app = express();
-const port = config.port; // Use the PORT environment variable or default to 3000
+const port = config.port;
 
 function getCpuUsage() {
     const cpus = os.cpus();
@@ -35,7 +31,6 @@ function getCpuUsage() {
 
 app.use('/youtube', youtubeRouter);
 
-// Health check route
 app.get('/health', (req, res) => {
     res.json({
         os: os.type(),
