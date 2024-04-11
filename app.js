@@ -1,21 +1,17 @@
-require('dotenv').config();
-
 // express for creating a server
 // googleapis for interacting with Youtube API
 
 const express = require('express');
 const { google } = require('googleapis');
 const os = require('os');
+const config = require('./config');
 
 // Initalizing an express app
 const app = express();
-const port = process.env.PORT || 3000; // Use the PORT environment variable or default to 3000
+const port = config.port; // Use the PORT environment variable or default to 3000
 
 // Setting up the YouTube Data API client with the necessary configuration, version & authentication method
-const youtube = google.youtube({
-    version: 'v3',
-    auth: process.env.YOUTUBE_API_KEY
-});
+const youtube = google.youtube(config.youtubeApi);
 
 function getCpuUsage(){
     const cpus = os.cpus();
@@ -61,8 +57,8 @@ app.get('/youtube', async (req, res) => {
     try {
         const searchResponse = await youtube.search.list({
             part: 'snippet',
-            q: 'Autodesk', // Search for videos related to Autodesk
-            maxResults: 10,
+            q: config.searchSettings.textToSearch,
+            maxResults: config.searchSettings.maxResults,
             type: 'video'
         });
         
