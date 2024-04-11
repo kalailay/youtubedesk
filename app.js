@@ -1,17 +1,17 @@
 require('dotenv').config();
 
-//express for creating a server
-//googleapis for interacting with Youtube API
+// express for creating a server
+// googleapis for interacting with Youtube API
 
 const express = require('express');
 const { google } = require('googleapis');
 const os = require('os');
 
-//initalizing an express app
+// Initalizing an express app
 const app = express();
 const port = process.env.PORT || 3000; // Use the PORT environment variable or default to 3000
 
-//setting up the YouTube Data API client with the necessary configuration, version & authentication method
+// Setting up the YouTube Data API client with the necessary configuration, version & authentication method
 const youtube = google.youtube({
     version: 'v3',
     auth: process.env.YOUTUBE_API_KEY
@@ -31,7 +31,7 @@ function getCpuUsage(){
         }
     });
 
-    //Calculate CPU usage precentage
+    // Calculate CPU usage precentage
     const idlePrecentage = idleTime / cpus.length;
     const totalPrecentage = totalTime / cpus.length;
     const usagePrecentage = 100 - (100 * idlePrecentage / totalPrecentage);
@@ -65,6 +65,7 @@ app.get('/youtube', async (req, res) => {
             maxResults: 10,
             type: 'video'
         });
+        
         // Ensure videoIds is defined in this scope and collect IDs
         const videoIds = searchResponse.data.items.map(item => item.id.videoId).join(',');
 
@@ -79,12 +80,12 @@ app.get('/youtube', async (req, res) => {
                 views: video.statistics.viewCount
             };
 
-            // Log each video's details to the console fro debugging
-            console.log(videoDetail);
+            // Log each video's details to the console for debugging
+            // console.log(videoDetail);
             return videoDetail;
         });
 
-        //Send videosInfo as the response
+        // Send videosInfo as the response
         res.json(videosInfo);
     } catch (error) {
         console.error('Error fetching videos:', error);
@@ -105,4 +106,3 @@ app.get('/health', (req, res) => {
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
-
