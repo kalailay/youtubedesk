@@ -48,7 +48,7 @@ describe('YouTube Router', () => {
         expect(response.body).toEqual([
             {
                 title: 'AutoCad, BIM and Revit',
-                length: '10:02:54', // Ensure your convertDuration function handles this correctly
+                length: '10:02:54',
                 views: 450
             }
         ]);

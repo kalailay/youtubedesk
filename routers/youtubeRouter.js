@@ -6,7 +6,6 @@ const { convertDuration } = require('../utilities');
 
 const youtubeRouter = Router();
 
-// Setting up the YouTube Data API client with the necessary configuration, version & authentication method
 const youtube = google.youtube(config.youtubeApi);
 
 youtubeRouter.get('/', async (req, res) => {
@@ -34,7 +33,7 @@ youtubeRouter.get('/', async (req, res) => {
             };
 
             // Log each video's details to the console for debugging
-            console.log(videoDetail);
+            // console.log(videoDetail);
             return videoDetail;
         });
 
