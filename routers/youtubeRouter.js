@@ -34,7 +34,7 @@ youtubeRouter.get('/', async (req, res) => {
             };
 
             // Log each video's details to the console for debugging
-            // console.log(videoDetail);
+            console.log(videoDetail);
             return videoDetail;
         });
 

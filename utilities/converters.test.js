@@ -1,4 +1,4 @@
-const {convertDuration} = require('./converters');
+const { convertDuration } = require('./converters');
 
 describe('convertDuration', () => {
     test('handles full duration', () => {
